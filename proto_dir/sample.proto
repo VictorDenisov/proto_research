@@ -6,7 +6,7 @@ package tutorial;
 import "google/api/annotations.proto";
 
 
-option go_package = "github.com/proto_repo/proto_dir";
+option go_package = "github.com/proto_research/examples/tutorialpb";
 
 service YourService {
   rpc Echo(AddressBook) returns (AddressBook) {

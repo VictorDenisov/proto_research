@@ -1,18 +1,11 @@
 #!/bin/bash
 
 if [[ $# -eq 0 ]]; then
-	docker run --volume=`pwd`:/home/ golang /home/generate.sh docker
+	docker run --volume=`pwd`:/home/ golang_proto /home/generate.sh docker
 else
 	if [[ $1 -eq "docker" ]]; then
 		echo "Running inside docker"
 		cd /home/
-
-		apt-get update
-		apt-get install -y protobuf-compiler
-		apt-get install -y protobuf-compiler-grpc
-		apt-get install -y quilt
-		go install google.golang.org/protobuf/cmd/protoc-gen-go
-		go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 
 		mkdir -p google/api
 		pushd google/api
@@ -28,10 +21,10 @@ else
 		quilt pop -a
 		popd
 
-		mv github.com/proto_repo/proto_dir/sample.pb.go proto_dir
-		mv github.com/proto_repo/proto_dir/sample.pb.gw.go proto_dir
+		mv github.com/proto_research/examples/tutorialpb/sample.pb.go examples/tutorialpb
+		mv github.com/proto_research/examples/tutorialpb/sample.pb.gw.go examples/tutorialpb
 		rm -Rf github.com
-		chown 1000:1000 proto_dir/sample.pb.go
+		chown -R 1000:1000 examples
 
 		pushd proto_dir
 		quilt push -a
