@@ -4,25 +4,35 @@ package main
 import "fmt"
 
 import (
+	"context"
+	"log"
 	"net"
+	"strconv"
 
-	"example.com/examples/tutorialpb"
+	t "github.com/VictorDenisov/proto_research/examples/tutorialpb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
+type YourService struct {
+}
+
+func (y *YourService) Echo(context.Context, *t.AddressBook) (*t.AddressBook, error) {
+	return nil, nil
+}
+
 func main() {
-	var p tutorialpb.Person
+	var p t.Person
 
 	fmt.Println("vim-go: %v", p)
 
-	lis, err := net.Listen("tcp", ":"+strconv.Itoa(applicationJson.GrpcPort))
+	lis, err := net.Listen("tcp", ":"+strconv.Itoa(8090))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	grpcServer := grpc.NewServer(grpc.MaxSendMsgSize(100 * MiB))
-	g.RegisterGroupsServer(grpcServer, &YourService{})
+	grpcServer := grpc.NewServer()
+	t.RegisterYourServiceServer(grpcServer, &YourService{})
 	reflection.Register(grpcServer)
-	go grpcServer.Serve(lis)
+	grpcServer.Serve(lis)
 }

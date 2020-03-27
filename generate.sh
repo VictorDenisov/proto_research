@@ -7,6 +7,11 @@ else
 		echo "Running inside docker"
 		cd /home/
 
+		go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.5
+		go get github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+		go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+
+
 		mkdir -p google/api
 		pushd google/api
 		wget https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/annotations.proto
@@ -14,15 +19,15 @@ else
 
 		popd
 
-		protoc --proto_path=proto_dir --go_out=. proto_dir/sample.proto -I.
-		protoc --grpc-gateway_out=logtostderr=true:. proto_dir/sample.proto
+		protoc --go_out=plugins=grpc:. proto_dir/sample.proto -I.
+		#protoc --grpc-gateway_out=logtostderr=true:. proto_dir/sample.proto
 
 		pushd proto_dir
 		quilt pop -a
 		popd
 
 		mv github.com/proto_research/examples/tutorialpb/sample.pb.go examples/tutorialpb
-		mv github.com/proto_research/examples/tutorialpb/sample.pb.gw.go examples/tutorialpb
+		#mv github.com/proto_research/examples/tutorialpb/sample.pb.gw.go examples/tutorialpb
 		rm -Rf github.com
 		chown -R 1000:1000 examples
 
