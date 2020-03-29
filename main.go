@@ -11,14 +11,20 @@ import (
 
 	t "github.com/VictorDenisov/proto_research/examples/tutorialpb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/reflection"
 )
 
 type YourService struct {
 }
 
-func (y *YourService) Echo(context.Context, *t.AddressBook) (*t.AddressBook, error) {
-	return nil, nil
+func (y *YourService) Echo(c context.Context, b *t.AddressBook) (*t.AddressBook, error) {
+	p, ok := peer.FromContext(c)
+	fmt.Printf("%v %v\n", p, ok)
+
+	return &t.AddressBook{
+		People: []*t.Person{&t.Person{Name: "Bye"}},
+	}, nil
 }
 
 func main() {
